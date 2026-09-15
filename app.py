@@ -20,7 +20,10 @@ def send_to_colab(zip_file):
             output_path = "./final_output_video.mp4"
             with open(output_path, 'wb') as f: f.write(response.content)
             return "🎉 Video Generation Success! Use the download box below to save it.", output_path
-        return f"❌ Backend Error: {response.text}", None
+        
+        # 🩹 FIX: Extracts and passes the clean error string payload directly to the frontend display box
+        error_detail = response.json().get("detail", "Unknown server processing error.")
+        return f"❌ Processing Error: {error_detail}", None
     except Exception as e:
         return f"❌ Connection Error: {str(e)}", None
 
